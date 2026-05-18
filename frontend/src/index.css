@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #FFFFFF;
+  --color-green: #3AA640;
+  --color-blue: #177E89;
+  --color-gold: #E0BE36;
+}
+
+/* Toolbar de accesibilidad */
+
+/* tamaño de texto */
+html {
+  --a11y-font-scale: 1;
+  font-size: calc(16px * var(--a11y-font-scale, 1));
+}
+
+/* modo alto contraste */ 
+html.high-contrast {
+  --text: #ffffff;
+  --text-muted: #d1d5db;
+  --bg: #000000;
+  --surface: #111111;
+  --border: #ffffff;
+  --accent: #ffe500;
+}
+
+html.high-contrast body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+html.high-contrast .bg-white {
+  background: var(--surface) !important;
+}
+
+html.high-contrast .border {
+  border-color: var(--border) !important;
+}
+
+/* textos grises (tengo muchos text-gray-xxx) */
+html.high-contrast .text-gray-400,
+html.high-contrast .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+html.high-contrast .text-gray-800,
+html.high-contrast .text-gray-900 {
+  color: var(--text) !important;
+}
+
+/* links */
+html.high-contrast a {
+  color: var(--accent);
+}
+
