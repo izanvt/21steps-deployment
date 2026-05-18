@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "https://21steps-deployment-production.up.railway.app/api";
 
 // registro 
 export const registerUser = createAsyncThunk(
