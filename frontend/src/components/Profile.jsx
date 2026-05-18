@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ShareCard from './ShareCard'
 
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 // badge individual

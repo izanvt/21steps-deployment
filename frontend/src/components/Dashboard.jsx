@@ -163,7 +163,7 @@ export default function Dashboard() {
     // recupera el usuario fresco para actualizar la racha (streak)
     useEffect(() => {
         if (!token) return;
-        fetch(`http://localhost:8000/api/profile`, {
+        fetch(`${import.meta.env.VITE_API_URL}/profile`, {
             headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
         })
             .then(r => r.json())
@@ -180,7 +180,7 @@ export default function Dashboard() {
     // verifica si esta conectado a Google Calendar al cargar, para guardar si esta conectado o no
     useEffect(() => {
         if (!token) return;
-        fetch(`http://localhost:8000/api/google/status`, {
+        fetch(`${import.meta.env.VITE_API_URL}/google/status`, {
             headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
         })
             .then(r => r.json())
@@ -191,7 +191,7 @@ export default function Dashboard() {
     // conexión con Google Calendar
     const handleGoogleConnect = async () => {
         try {
-            const res = await fetch(`http://localhost:8000/api/google/auth`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/google/auth`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'
@@ -212,7 +212,7 @@ export default function Dashboard() {
 
     // y desconexión
     const handleGoogleDisconnect = async () => {
-        await fetch(`http://localhost:8000/api/google/disconnect`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/google/disconnect`, {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
         });

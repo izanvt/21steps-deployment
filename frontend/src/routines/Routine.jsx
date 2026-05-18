@@ -134,7 +134,7 @@ export default function Routine() {
 
     // sincronizar la rutina con Google
     const handleSyncGoogle = async () => {
-        const res = await fetch(`http://localhost:8000/api/google/sync/${routine.id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/google/sync/${routine.id}`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,

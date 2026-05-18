@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const APP_URL = "http://localhost:5173";
+const APP_URL = import.meta.env.VITE_API_URL;
 
 export default function ShareCard({ profile }) {
     const [copied, setCopied] = useState(false);
