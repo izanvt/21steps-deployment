@@ -1,4 +1,4 @@
-    import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { selectUserRoutines } from "../routines/routinesSlice";
@@ -190,16 +190,24 @@ export default function Dashboard() {
 
     // conexión con Google Calendar
     const handleGoogleConnect = async () => {
-        const res = await fetch(`http://localhost:8000/api/google/auth`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json'
-            }
-        });
-        const data = await res.json();
+        try {
+            const res = await fetch(`http://localhost:8000/api/google/auth`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json'
+                }
+            });
+            const data = await res.json();
 
-        // redirección a la página de google
-        window.location.href = data.url;
+            // redirección a la página de google si la URL existe
+            if (data && data.url) {
+                window.location.href = data.url;
+            } else {
+                console.error("No se pudo obtener la URL de autenticación:", data);
+            }
+        } catch (error) {
+            console.error("Error al conectar con Google:", error);
+        }
     };
 
     // y desconexión
