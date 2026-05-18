@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 // crear una estructura redux para una llamada tan simple sería poco eficiente. las llamadas a la API se haran directamente.
-const API_URL = "http://localhost:8000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // cada badge individual
 function BadgeCard({ badge, unlocked, unlockedAt }) {

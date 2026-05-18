@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AdminPanel() {
     const token = useSelector(state => state.auth.token);

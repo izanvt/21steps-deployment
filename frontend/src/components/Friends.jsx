@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function FriendCard({ friend, onRemove }) {
     const [confirm, setConfirm] = useState(false);
