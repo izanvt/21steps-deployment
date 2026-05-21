@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const APP_URL = import.meta.env.VITE_API_URL;
+const APP_URL = "https://21steps-deployment-production.up.railway.app"
 
 export default function ShareCard({ profile }) {
     const [copied, setCopied] = useState(false);
