@@ -91,6 +91,8 @@ class GoogleCalendarController extends Controller
         $client->setUseBatch(true);
         $batch = new \Google\Http\Batch($client);
 
+        $created = 0;
+        
         // preparamos las peticiones
         foreach ($userRoutine->events as $event) {
             try {
