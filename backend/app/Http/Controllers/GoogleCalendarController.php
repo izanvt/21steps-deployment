@@ -50,9 +50,9 @@ class GoogleCalendarController extends Controller
         }
 
         $userId = $request->state;
-        $user   = \App\Models\User::find($userId);
+        $user = \App\Models\User::find($userId);
 
-        if (! $user) {
+        if (!$user) {
             return redirect(env('FRONTEND_URL', 'http://localhost:5173') . '/?google=error');
         }
 
@@ -71,11 +71,11 @@ class GoogleCalendarController extends Controller
 
         $user = $request->user();
 
-        if (! $user->google_token) {
+        if (!$user->google_token) {
             return response()->json(['message' => 'No se ha podido conectar con Google Calendar.'], 422);
         }
 
-        $client    = $this->getClient();
+        $client = $this->getClient();
         $tokenData = json_decode($user->google_token, true);
         $client->setAccessToken($tokenData);
 
@@ -92,40 +92,49 @@ class GoogleCalendarController extends Controller
         $batch = new \Google\Http\Batch($client);
 
         $created = 0;
-        
-        // preparamos las peticiones
+
+        \Log::info('Iniciando sync - eventos: ' . $userRoutine->events->count());
+
         foreach ($userRoutine->events as $event) {
             try {
-                $dateStr    = \Carbon\Carbon::parse($event->date)->format('Y-m-d');
+                $dateStr = \Carbon\Carbon::parse($event->date)->format('Y-m-d');
                 $dateEndStr = \Carbon\Carbon::parse($event->date)->addDay()->format('Y-m-d');
+
+                \Log::info('Procesando evento fecha: ' . $dateStr);
 
                 $activityName = $event->userRoutineActivity?->activity?->name ?? 'Actividad';
                 $activityDesc = $event->userRoutineActivity?->activity?->description ?? '';
-                $routineName  = $userRoutine->routine?->name ?? '21Steps';
+                $duration = $event->userRoutineActivity?->activity?->duration;
+                $routineName = $userRoutine->routine?->name ?? '21Steps';
+
+                \Log::info('Actividad: ' . $activityName . ' Rutina: ' . $routineName);
 
                 $gEvent = new Event();
                 $gEvent->setSummary("{$routineName} — {$activityName}");
 
                 $description = $activityDesc;
-                $description .= "\n\n— Creado por 21Steps";
+                if ($duration)
+                    $description .= "\n\nDuración: {$duration} min";
+                $description .= "\n\n— 21Steps";
                 $gEvent->setDescription(trim($description));
 
                 $start = new EventDateTime();
                 $start->setDate($dateStr);
-
-                $end  = new EventDateTime();
+                $end = new EventDateTime();
                 $end->setDate($dateEndStr);
-
                 $gEvent->setStart($start);
                 $gEvent->setEnd($end);
 
-                $request = $service->events->insert('primary', $gEvent);
-                $batch->add($request, 'event_' . $event->id);
+                $service->events->insert('primary', $gEvent);
+                $created++;
+                \Log::info('Evento creado: ' . $dateStr);
 
             } catch (\Exception $e) {
-                \Log::error('Error preparando evento para calendar: ' . $e->getMessage());
+                \Log::error('Error evento: ' . $e->getMessage());
             }
         }
+
+        \Log::info('Sync completado - creados: ' . $created);
 
         // ejecutamos todas las peticiones de golpe
         try {
@@ -146,7 +155,7 @@ class GoogleCalendarController extends Controller
     public function status(Request $request)
     {
         return response()->json([
-            'connected' => ! is_null($request->user()->google_token),
+            'connected' => !is_null($request->user()->google_token),
         ]);
     }
 
