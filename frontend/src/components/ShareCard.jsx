@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const APP_URL = "https://21steps-deployment-production.up.railway.app"
+const APP_URL = "https://21steps-deployment.vercel.app"
 
 export default function ShareCard({ profile }) {
     const [copied, setCopied] = useState(false);
